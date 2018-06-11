@@ -1,35 +1,61 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from 'react'
+import './App.css'
 
-const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-const WORDS = ["HELLO"]
+const WORDS = ['KO', 'YO', 'HELLO', 'banane']
+const LETTERS = [
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'K',
+  'L',
+  'M',
+  'N',
+  'O',
+  'P',
+  'Q',
+  'R',
+  'S',
+  'T',
+  'U',
+  'V',
+  'W',
+  'X',
+  'Y',
+  'Z'
+]
 
 class App extends Component {
   constructor() {
     super()
-    const selectWord = WORDS[this.rand(0, WORDS.length)]
 
+    const selectedWord = WORDS[this.rand(0, WORDS.length - 1)]
     this.state = {
       usedLetters: [],
-      word: selectWord,
-      show: '_'.repeat(selectWord.length),
+      word: selectedWord,
+      show: '_'.repeat(selectedWord.length),
       keyboard: LETTERS
     }
   }
 
   handleClick = ({ target }) => {
     this.setState(state => {
-      const usedLetters = state.usedLetters.includes(target.value) ? usedLetters : [...state.usedLetters, target.value]
-      const indexLetterKeyboard = state.keyboard.indexOf(target.value)
-      console.log(indexLetterKeyboard)
-      console.log(state.keyboard)
+      const usedLetters = state.usedLetters.includes(target.value)
+        ? state.usedLetters
+        : [...state.usedLetters, target.value]
       return {
         usedLetters,
         show: state.word.replace(
           /\w/g,
-          (letter) => (usedLetters.includes(letter) ? letter : '_')
+          letter => (usedLetters.includes(letter) ? letter : '_')
         ),
-        keyboard: state.keyboard.filter(value => value !== target.value)
+        keyboard: this.state.keyboard.filter(value => value !== target.value)
       }
     })
 
@@ -37,7 +63,7 @@ class App extends Component {
 
   rand(min, max) {
     // random entier entre min et max
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(Math.random() * (max - min + 1)) + min
   }
 
   render() {
@@ -47,14 +73,20 @@ class App extends Component {
           <p className="word">{this.state.show}</p>
         </div>
         <div className="keyboard">
-          {this.state.keyboard.map((value) => {
-
-            return <input type="button" value={value} key={value} onClick={this.handleClick} />
+          {this.state.keyboard.map(value => {
+            return (
+              <input
+                type="button"
+                value={value}
+                key={value}
+                onClick={this.handleClick}
+              />
+            )
           })}
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
