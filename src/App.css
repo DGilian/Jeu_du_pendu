@@ -17,3 +17,7 @@
   flex-direction: column;
   align-items: center;
 }
+
+.word{
+  letter-spacing: 1rem;
+}

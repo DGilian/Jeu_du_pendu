@@ -2,29 +2,37 @@ import React, { Component } from 'react';
 import './App.css';
 
 const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-const WORDS = ["HELLO", "BONJOUR", "TELEVISION", "ECRAN", "BANANE"]
+const WORDS = ["HELLO"]
 
 class App extends Component {
   constructor() {
     super()
+    const selectWord = WORDS[this.rand(0, WORDS.length)]
+
     this.state = {
       usedLetters: [],
-      word: WORDS[this.rand(0, WORDS.length)],
-      show: " "
+      word: selectWord,
+      show: '_'.repeat(selectWord.length),
+      keyboard: LETTERS
     }
-    this.handleClick = this.handleClick.bind(this)
   }
 
-  handleClick = (e) => {
-    this.setState({ usedLetters: [...this.state.usedLetters, ...e.target.value] })
-    this.computeDisplay(this.state.word, this.state.usedLetters)
-  }
-  computeDisplay = (phrase, usedLetters) => {
-    this.setState({
-      show: phrase.replace(/\w/g,
-        (letter) => (usedLetters.includes(letter) ? letter : '_')
-      )
+  handleClick = ({ target }) => {
+    this.setState(state => {
+      const usedLetters = state.usedLetters.includes(target.value) ? usedLetters : [...state.usedLetters, target.value]
+      const indexLetterKeyboard = state.keyboard.indexOf(target.value)
+      console.log(indexLetterKeyboard)
+      console.log(state.keyboard)
+      return {
+        usedLetters,
+        show: state.word.replace(
+          /\w/g,
+          (letter) => (usedLetters.includes(letter) ? letter : '_')
+        ),
+        keyboard: state.keyboard.filter(value => value !== target.value)
+      }
     })
+
   }
 
   rand(min, max) {
@@ -36,10 +44,10 @@ class App extends Component {
     return (
       <div className="App">
         <div>
-          <p>{this.state.show}</p>
+          <p className="word">{this.state.show}</p>
         </div>
         <div className="keyboard">
-          {LETTERS.map((value) => {
+          {this.state.keyboard.map((value) => {
 
             return <input type="button" value={value} key={value} onClick={this.handleClick} />
           })}
